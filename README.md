@@ -3,7 +3,7 @@ warehouse-management backend code repository.
 Project made only with **typescript**.
 
 ### Objective
-The goal of this project is to create a system where users can track the products stored in their warehouses, knowing which employee took the product, the quantity that was removed or added, and the reason for the restocking or removal.
+This project allows users to track product movements in their warehouses, showing quantities added or removed, who performed the action, and the reason. Removals are done by employees, while restocking can be done by an employee or the supplying company/brand.
 
 ## Core technologies
 
