@@ -18,12 +18,11 @@ model User {
   id    String    @id
   email String?  @unique
   name  String
-  phone String?
+  phone String?  @unique
   cpf String @unique
   password String
-  isAdmin Boolean?
+  isAdmin Boolean
   createdAt DateTime
   updatedAt DateTime?
   deletedAt DateTime?
 }
-

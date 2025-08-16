@@ -6,7 +6,7 @@ CREATE TABLE "public"."User" (
     "phone" TEXT,
     "cpf" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "isAdmin" BOOLEAN,
+    "isAdmin" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3),
     "deletedAt" TIMESTAMP(3),
