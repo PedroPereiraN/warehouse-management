@@ -16,5 +16,5 @@ Project made only with **typescript**.
 ## Run the project:
 
 ```
-sudo docker compose up -d --build
+docker compose up -d --build
 ```
