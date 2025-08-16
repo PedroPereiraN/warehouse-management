@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: ./app
+    container_name: myapp
+    volumes:
+      - ./app:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./app/.env
+    environment:
+      - VIRTUAL_ENVIRONMENT=${VIRTUAL_ENVIRONMENT:-dev}
+    command: >
+      sh -c "if [ \"$$VIRTUAL_ENVIRONMENT\" = 'prod' ]; then
+              pnpm build:create && pnpm build:run && pnpm prisma generate;
+            else
+              pnpm dev && pnpm prisma generate;
+            fi"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: db
+    ports:
+      - 5432:5432
