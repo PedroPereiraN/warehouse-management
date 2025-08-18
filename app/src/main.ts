@@ -5,6 +5,8 @@ import { UserController } from "./infra/controllers/user.controller.express";
 import { UserRepositoryPrisma } from "./infra/repositories/user.repository.prisma";
 import prisma from "./lib/prisma";
 import { Request, Response } from "express";
+import { verifyEnvVariables } from "./config/verify-env-variables";
+import { Logger } from "./lib/logger";
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -14,32 +16,17 @@ app.use(express.json());
 // Enables CORS for all origins.
 app.use(cors());
 
-if (!process.env.PORT) {
-  console.log("Consider specifying a default port in the .env file.");
-}
+verifyEnvVariables();
 
-if (!process.env.VIRTUAL_ENVIRONMENT) {
-  console.log(
-    "Please make sure to define a default virtual environment in the .env file for consistency.",
-  );
-}
-
-if (!process.env.DATABASE_URL) {
-  console.log("You must specify the database URL in the .env file.");
-}
-
+// user
 const uRepository = UserRepositoryPrisma.create(prisma);
 const uCreateUsecase = CreateUserUsecase.create(uRepository);
 const uController = UserController.create(uCreateUsecase);
 
-function main() {
-  app.post("/user", (req: Request, res: Response) =>
-    uController.createUser(req, res),
-  );
+app.post("/user", (req: Request, res: Response) =>
+  uController.createUser(req, res),
+);
 
-  app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-  });
-}
-
-main();
+app.listen(port, () => {
+  Logger.info(`Server running on port ${port}`);
+});
