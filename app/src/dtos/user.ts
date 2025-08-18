@@ -10,3 +10,7 @@ export type CreateUserInputDto = {
 export type CreateUserOutputDto = {
   id: string;
 };
+
+export type CreateUserResponseDto = {
+  id: string;
+};
