@@ -13,9 +13,11 @@ services:
       - VIRTUAL_ENVIRONMENT=${VIRTUAL_ENVIRONMENT:-dev}
     command: >
       sh -c "if [ \"$$VIRTUAL_ENVIRONMENT\" = 'prod' ]; then
-              pnpm build:create && pnpm build:run && pnpm prisma migrate deploy;
+              pnpm prisma migrate deploy &&
+              pnpm build:create && pnpm build:run;
             else
-              pnpm dev && pnpm prisma migrate deploy;
+              pnpm prisma migrate deploy &&
+              pnpm dev;
             fi"
     depends_on:
       - postgres

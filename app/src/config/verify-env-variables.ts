@@ -12,6 +12,6 @@ export function verifyEnvVariables() {
   }
 
   if (!process.env.DATABASE_URL) {
-    Logger.warn("You must specify the database URL in the .env file.");
+    Logger.error("You must specify the database URL in the .env file.");
   }
 }
