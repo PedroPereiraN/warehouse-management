@@ -39,6 +39,11 @@ export class CreateUserRoute implements Route {
 
   public getHandler() {
     return async (request: Request, response: Response) => {
+      Logger.info(
+        "Route called: ",
+        `[${this.getMethod().toUpperCase()}] ${this.getPath()}`,
+      );
+
       const { email, name, phone, cpf, password, isAdmin } = request.body;
 
       const input: CreateUserInputDto = {
@@ -97,11 +102,11 @@ export class CreateUserRoute implements Route {
                   .json({ errors: prismaFormatedErrors });
             }
           }
-          const responseBody = this.presentError(error);
+          const errorInfo = this.presentError(error);
 
-          Logger.error("Error creating user: ", responseBody);
+          Logger.error("", errorInfo);
 
-          response.status(500).json(responseBody);
+          response.status(errorInfo.code).json({ error: errorInfo.message });
           return;
         });
     };
@@ -121,8 +126,14 @@ export class CreateUserRoute implements Route {
   }
 
   private presentError(error: Error) {
+    let code = 500;
+
+    if (error.message.toLowerCase().includes("already in use")) {
+      code = 400;
+    }
     const response = {
-      error: error.message,
+      message: error.message,
+      code,
     };
 
     return response;
