@@ -20,7 +20,6 @@ export class CreateUserUsecase
     email,
     name,
     phone,
-    cpf,
     password,
     isAdmin,
   }: CreateUserInputDto): Promise<CreateUserOutputDto> {
@@ -40,12 +39,6 @@ export class CreateUserUsecase
       }
     }
 
-    const checkCpf = await this.userGateway.findByCpf(cpf);
-
-    if (checkCpf) {
-      throw new Error("CPF already in use");
-    }
-
     const hash = await this.passwordHasher.hash(password);
 
     const user = User.create({
@@ -53,7 +46,6 @@ export class CreateUserUsecase
       name,
       phone,
       password: hash,
-      cpf,
       isAdmin,
     });
 

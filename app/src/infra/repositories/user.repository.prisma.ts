@@ -15,7 +15,6 @@ export class UserRepositoryPrisma implements UserGateway {
       email: user.values.email,
       name: user.values.name,
       phone: user.values.phone,
-      cpf: user.values.cpf,
       password: user.getPassword(),
       createdAt: user.values.createdAt,
       updatedAt: user.values.updatedAt,
@@ -36,7 +35,6 @@ export class UserRepositoryPrisma implements UserGateway {
         email: user.email,
         name: user.name,
         phone: user.phone,
-        cpf: user.cpf,
         password: user.password,
         isAdmin: user.isAdmin,
         createdAt: user.createdAt.toISOString(),
@@ -61,32 +59,6 @@ export class UserRepositoryPrisma implements UserGateway {
         email: user.email,
         name: user.name,
         phone: user.phone,
-        cpf: user.cpf,
-        password: user.password,
-        isAdmin: user.isAdmin,
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt?.toISOString() ?? null,
-        deletedAt: user.deletedAt?.toISOString() ?? null,
-      });
-
-      return data;
-    }
-
-    return null;
-  }
-
-  public async findByCpf(cpf: string): Promise<User | null> {
-    const user = await this.prismaClient.user.findUnique({
-      where: { cpf },
-    });
-
-    if (user) {
-      const data = User.with({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        phone: user.phone,
-        cpf: user.cpf,
         password: user.password,
         isAdmin: user.isAdmin,
         createdAt: user.createdAt.toISOString(),
@@ -111,7 +83,6 @@ export class UserRepositoryPrisma implements UserGateway {
         email: user.email,
         name: user.name,
         phone: user.phone,
-        cpf: user.cpf,
         password: user.password,
         isAdmin: user.isAdmin,
         createdAt: user.createdAt.toISOString(),

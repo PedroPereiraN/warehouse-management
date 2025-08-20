@@ -1,11 +1,10 @@
-import { CPF_LENGTH, PHONE_LENGTH } from "../../utils/constants";
+import { PHONE_LENGTH } from "../../utils/constants";
 import { emailRegex } from "../../utils/regex";
 import { isValidISODate } from "../../utils/validators";
 
 export type CreateUserProps = {
-  email: string | null;
+  email: string;
   phone: string | null;
-  cpf: string;
   password: string;
   name: string;
   isAdmin: boolean;
@@ -13,10 +12,9 @@ export type CreateUserProps = {
 
 export type UserProps = {
   id: string;
-  email: string | null;
+  email: string;
   name: string;
   phone: string | null;
-  cpf: string;
   password: string;
   isAdmin: boolean;
   createdAt: string;
@@ -37,15 +35,11 @@ export class User {
       throw new Error(`Invalid deletedAt datetime: ${props.deletedAt}`);
     }
 
-    if (props.cpf.length !== CPF_LENGTH) {
-      throw new Error(`Invalid CPF: ${props.cpf}`);
-    }
-
     if (props?.phone && props.phone.length !== PHONE_LENGTH) {
-      throw new Error(`Invalid phone: ${props.cpf}`);
+      throw new Error(`Invalid phone: ${props.phone}`);
     }
 
-    if (props?.email && !emailRegex.test(props.email)) {
+    if (!emailRegex.test(props.email)) {
       throw new Error(`Invalid email: ${props.email}`);
     }
   }
@@ -56,7 +50,6 @@ export class User {
     name,
     password,
     isAdmin,
-    cpf,
   }: CreateUserProps): User {
     return new User({
       id: crypto.randomUUID().toString(),
@@ -65,8 +58,9 @@ export class User {
       name,
       password,
       isAdmin,
-      cpf,
       createdAt: new Date().toISOString(),
+      updatedAt: null,
+      deletedAt: null,
     });
   }
 

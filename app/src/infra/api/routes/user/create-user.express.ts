@@ -27,7 +27,6 @@ export class CreateUserRoute implements Route {
       email: z.string().email().optional(),
       name: z.string().min(2),
       phone: z.string().min(11).max(11).optional(),
-      cpf: z.string().min(11).max(11),
       password: z.string().min(6),
       isAdmin: z.boolean().default(false),
     });
@@ -44,13 +43,12 @@ export class CreateUserRoute implements Route {
         `[${this.getMethod().toUpperCase()}] ${this.getPath()}`,
       );
 
-      const { email, name, phone, cpf, password, isAdmin } = request.body;
+      const { email, name, phone, password, isAdmin } = request.body;
 
       const input: CreateUserInputDto = {
         email,
         name,
         phone,
-        cpf,
         password,
         isAdmin,
       };
@@ -59,7 +57,6 @@ export class CreateUserRoute implements Route {
         email,
         name,
         phone,
-        cpf,
         isAdmin,
       });
 
