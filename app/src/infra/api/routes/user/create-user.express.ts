@@ -8,6 +8,8 @@ import {
 import * as z from "zod";
 import { Logger } from "../../../../lib/logger";
 import { formatZodError } from "../../../../utils/helpers";
+import { Prisma } from "../../../../generated/prisma";
+import { formatPrismaErrors } from "../../../../helpers/format-prisma-errors";
 
 export class CreateUserRoute implements Route {
   private constructor(
@@ -73,6 +75,28 @@ export class CreateUserRoute implements Route {
           return;
         })
         .catch((error) => {
+          if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            const prismaFormatedErrors = formatPrismaErrors(error);
+
+            switch (error.code.toLowerCase()) {
+              case "p2002":
+                return response
+                  .status(409)
+                  .json({ errors: prismaFormatedErrors });
+              case "p2025":
+                return response
+                  .status(404)
+                  .json({ errors: prismaFormatedErrors });
+              case "p2003":
+                return response
+                  .status(400)
+                  .json({ errors: prismaFormatedErrors });
+              default:
+                return response
+                  .status(400)
+                  .json({ errors: prismaFormatedErrors });
+            }
+          }
           const responseBody = this.presentError(error);
 
           Logger.error("Error creating user: ", responseBody);
