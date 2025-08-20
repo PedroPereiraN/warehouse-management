@@ -1,6 +1,6 @@
 export type CreateUserInputDto = {
-  email?: string;
-  phone?: string;
+  email: string | null;
+  phone: string | null;
   cpf: string;
   password: string;
   name: string;

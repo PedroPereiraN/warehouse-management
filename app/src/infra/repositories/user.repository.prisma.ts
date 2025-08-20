@@ -24,4 +24,104 @@ export class UserRepositoryPrisma implements UserGateway {
 
     await this.prismaClient.user.create({ data });
   }
+
+  public async findById(id: string): Promise<User | null> {
+    const user = await this.prismaClient.user.findUnique({
+      where: { id },
+    });
+
+    if (user) {
+      const data = User.with({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        cpf: user.cpf,
+        password: user.password,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt?.toISOString() ?? null,
+        deletedAt: user.deletedAt?.toISOString() ?? null,
+      });
+
+      return data;
+    }
+
+    return null;
+  }
+
+  public async findByEmail(email: string): Promise<User | null> {
+    const user = await this.prismaClient.user.findUnique({
+      where: { email },
+    });
+
+    if (user) {
+      const data = User.with({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        cpf: user.cpf,
+        password: user.password,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt?.toISOString() ?? null,
+        deletedAt: user.deletedAt?.toISOString() ?? null,
+      });
+
+      return data;
+    }
+
+    return null;
+  }
+
+  public async findByCpf(cpf: string): Promise<User | null> {
+    const user = await this.prismaClient.user.findUnique({
+      where: { cpf },
+    });
+
+    if (user) {
+      const data = User.with({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        cpf: user.cpf,
+        password: user.password,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt?.toISOString() ?? null,
+        deletedAt: user.deletedAt?.toISOString() ?? null,
+      });
+
+      return data;
+    }
+
+    return null;
+  }
+
+  public async findByPhone(phone: string): Promise<User | null> {
+    const user = await this.prismaClient.user.findUnique({
+      where: { phone },
+    });
+
+    if (user) {
+      const data = User.with({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        cpf: user.cpf,
+        password: user.password,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt?.toISOString() ?? null,
+        deletedAt: user.deletedAt?.toISOString() ?? null,
+      });
+
+      return data;
+    }
+
+    return null;
+  }
 }

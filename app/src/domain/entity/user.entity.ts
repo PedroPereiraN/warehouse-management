@@ -3,8 +3,8 @@ import { emailRegex } from "../../utils/regex";
 import { isValidISODate } from "../../utils/validators";
 
 export type CreateUserProps = {
-  email?: string;
-  phone?: string;
+  email: string | null;
+  phone: string | null;
   cpf: string;
   password: string;
   name: string;
@@ -13,15 +13,15 @@ export type CreateUserProps = {
 
 export type UserProps = {
   id: string;
-  email?: string;
+  email: string | null;
   name: string;
-  phone?: string;
+  phone: string | null;
   cpf: string;
   password: string;
   isAdmin: boolean;
   createdAt: string;
-  updatedAt?: string;
-  deletedAt?: string;
+  updatedAt: string | null;
+  deletedAt: string | null;
 };
 
 export class User {
