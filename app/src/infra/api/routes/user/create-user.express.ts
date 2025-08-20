@@ -48,17 +48,19 @@ export class CreateUserRoute implements Route {
         isAdmin,
       };
 
-      Logger.info("User input: ", input);
+      Logger.info("User input: ", {
+        email,
+        name,
+        phone,
+        cpf,
+        isAdmin,
+      });
 
       const result = this.validate(input);
 
       if (!result.success) {
-        Logger.error("", formatZodError(result));
-
         response.status(400).json({ errors: formatZodError(result) });
         return;
-      } else {
-        Logger.info("Zod schema validation result: ", result);
       }
 
       await this.createUserUsecase
