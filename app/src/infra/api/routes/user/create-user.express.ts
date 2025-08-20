@@ -5,6 +5,9 @@ import {
   CreateUserInputDto,
   CreateUserResponseDto,
 } from "../../../../dtos/user";
+import * as z from "zod";
+import { Logger } from "../../../../lib/logger";
+import { formatZodError } from "../../../../utils/helpers";
 
 export class CreateUserRoute implements Route {
   private constructor(
@@ -14,7 +17,22 @@ export class CreateUserRoute implements Route {
   ) {}
 
   public static create(createUserUsecase: CreateUserUsecase) {
-    return new CreateUserRoute("/user", HttpMethod.POST, createUserUsecase);
+    return new CreateUserRoute("/users", HttpMethod.POST, createUserUsecase);
+  }
+
+  private validate(values: CreateUserInputDto) {
+    const schema = z.object({
+      email: z.string().email().optional(),
+      name: z.string().min(2),
+      phone: z.string().min(11).max(11).optional(),
+      cpf: z.string().min(11).max(11),
+      password: z.string().min(6),
+      isAdmin: z.boolean().default(false),
+    });
+
+    const parsed = schema.safeParse(values);
+
+    return parsed;
   }
 
   public getHandler() {
@@ -30,14 +48,35 @@ export class CreateUserRoute implements Route {
         isAdmin,
       };
 
+      Logger.info("User input: ", input);
+
+      const result = this.validate(input);
+
+      if (!result.success) {
+        Logger.error("", formatZodError(result));
+
+        response.status(400).json({ errors: formatZodError(result) });
+        return;
+      } else {
+        Logger.info("Zod schema validation result: ", result);
+      }
+
       await this.createUserUsecase
         .execute(input)
         .then((output) => {
           const responseBody = this.present(output);
+          Logger.info("User created successfully: ", responseBody);
+
           response.status(201).json(responseBody);
+          return;
         })
         .catch((error) => {
-          return response.status(500).json({ error: error.message });
+          const responseBody = this.presentError(error);
+
+          Logger.error("Error creating user: ", responseBody);
+
+          response.status(500).json(responseBody);
+          return;
         });
     };
   }
@@ -52,6 +91,14 @@ export class CreateUserRoute implements Route {
 
   private present(input: CreateUserResponseDto): CreateUserResponseDto {
     const response = { id: input.id };
+    return response;
+  }
+
+  private presentError(error: Error) {
+    const response = {
+      error: error.message,
+    };
+
     return response;
   }
 }
