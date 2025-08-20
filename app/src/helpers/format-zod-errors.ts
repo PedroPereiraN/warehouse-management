@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { Logger } from "../lib/logger";
 
-export function formatZodError<T>(
+export function formatZodErrors<T>(
   error: z.ZodSafeParseError<T>,
 ): Array<{ field: string; code: string; message: string }> {
   const errors = JSON.parse(error.error.message);

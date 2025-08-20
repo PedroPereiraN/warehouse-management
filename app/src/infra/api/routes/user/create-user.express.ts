@@ -7,7 +7,7 @@ import {
 } from "../../../../dtos/user";
 import * as z from "zod";
 import { Logger } from "../../../../lib/logger";
-import { formatZodError } from "../../../../utils/helpers";
+import { formatZodErrors } from "../../../../helpers/format-zod-errors";
 import { Prisma } from "../../../../generated/prisma";
 import { formatPrismaErrors } from "../../../../helpers/format-prisma-errors";
 
@@ -61,7 +61,7 @@ export class CreateUserRoute implements Route {
       const result = this.validate(input);
 
       if (!result.success) {
-        response.status(400).json({ errors: formatZodError(result) });
+        response.status(400).json({ errors: formatZodErrors(result) });
         return;
       }
 
