@@ -13,3 +13,12 @@ export type CreateUserOutputDto = {
 export type CreateUserResponseDto = {
   id: string;
 };
+
+export type AuthenticateUserInputDto = {
+  email: string;
+  password: string;
+};
+
+export type AuthenticateUserOutputDto = {
+  token: string;
+};

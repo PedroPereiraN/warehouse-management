@@ -76,14 +76,39 @@ export class User {
   }
 
   //Returns the password (internal use only)
-  public getPassword(): string {
+  public get password() {
     return this.props.password;
   }
 
-  public get values(): Omit<UserProps, "password"> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...safeProps } = this.props;
+  public get id() {
+    return this.props.id;
+  }
 
-    return safeProps;
+  public get email() {
+    return this.props.email;
+  }
+
+  public get name() {
+    return this.props.name;
+  }
+
+  public get phone() {
+    return this.props.phone;
+  }
+
+  public get isAdmin() {
+    return this.props.isAdmin;
+  }
+
+  public get createdAt() {
+    return this.props.createdAt;
+  }
+
+  public get updatedAt() {
+    return this.props.updatedAt;
+  }
+
+  public get deletedAt() {
+    return this.props.deletedAt;
   }
 }

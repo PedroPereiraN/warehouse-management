@@ -23,12 +23,10 @@ export class CreateUserUsecase
     password,
     isAdmin,
   }: CreateUserInputDto): Promise<CreateUserOutputDto> {
-    if (email) {
-      const checkEmail = await this.userGateway.findByEmail(email);
+    const checkEmail = await this.userGateway.findByEmail(email);
 
-      if (checkEmail) {
-        throw new Error("Email already in use");
-      }
+    if (checkEmail) {
+      throw new Error("Email already in use");
     }
 
     if (phone) {
@@ -56,7 +54,7 @@ export class CreateUserUsecase
 
   private presentOutput(user: User): CreateUserOutputDto {
     const output: CreateUserOutputDto = {
-      id: user.values.id,
+      id: user.id,
     };
 
     return output;

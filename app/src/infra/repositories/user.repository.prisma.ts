@@ -11,14 +11,14 @@ export class UserRepositoryPrisma implements UserGateway {
 
   public async save(user: User): Promise<void> {
     const data = {
-      id: user.values.id,
-      email: user.values.email,
-      name: user.values.name,
-      phone: user.values.phone,
-      password: user.getPassword(),
-      createdAt: user.values.createdAt,
-      updatedAt: user.values.updatedAt,
-      isAdmin: user.values.isAdmin,
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      phone: user.phone,
+      password: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      isAdmin: user.isAdmin,
     };
 
     await this.prismaClient.user.create({ data });
