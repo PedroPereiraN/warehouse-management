@@ -7,6 +7,7 @@ import { CreateUserRoute } from "./infra/api/routes/user/create-user.express";
 import { BcryptPasswordHasher } from "./services/bcrypt-password-hasher";
 import { AuthenticateUserUsecase } from "./usecases/user/authenticate-user.usecase";
 import { JsonwebtokenService } from "./services/jsonwebtoken";
+import { AuthenticateUserRoute } from "./infra/api/routes/user/authenticate-user.express";
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 const secretKey = process.env.JWT_SECRET;
@@ -15,20 +16,24 @@ verifyEnvVariables();
 
 // user
 const bcryptPasswordHasher = BcryptPasswordHasher.create();
-const jsonwebtokenService = JsonwebtokenService.create(secretKey!);
 const uRepository = UserRepositoryPrisma.create(prisma);
 const uCreateUsecase = CreateUserUsecase.create(
   uRepository,
   bcryptPasswordHasher,
 );
-const uAuthenticateUser = AuthenticateUserUsecase.create(
+const uCreateUserRoute = CreateUserRoute.create(uCreateUsecase);
+const jsonwebtokenService = JsonwebtokenService.create(secretKey!);
+const uAuthenticateUsecase = AuthenticateUserUsecase.create(
   uRepository,
   bcryptPasswordHasher,
   jsonwebtokenService,
 );
+const uAuthenticateRoute = AuthenticateUserRoute.create(uAuthenticateUsecase);
 
-const uCreateUserRoute = CreateUserRoute.create(uCreateUsecase);
-
-const api = ApiExpress.create([uCreateUserRoute]);
+const api = ApiExpress.create([uCreateUserRoute, uAuthenticateRoute]);
 
 api.start(port);
+
+(async () => {
+  await uRepository.createDefaultUser();
+})();

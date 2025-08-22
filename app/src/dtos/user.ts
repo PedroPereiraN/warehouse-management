@@ -19,6 +19,10 @@ export type AuthenticateUserInputDto = {
   password: string;
 };
 
+export type AuthenticateUserResponseDto = {
+  token: string;
+};
+
 export type AuthenticateUserOutputDto = {
   token: string;
 };

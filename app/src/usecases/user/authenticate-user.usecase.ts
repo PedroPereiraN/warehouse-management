@@ -63,7 +63,10 @@ export class AuthenticateUserUsecase
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userData } = user;
 
-    const token = this.jwtService.sign(userData);
+    // 60 seconds * 60 minutes = 1 hour
+    const oneHourInSeconds = 60 * 60;
+
+    const token = this.jwtService.sign(userData, oneHourInSeconds);
 
     const output: AuthenticateUserOutputDto = {
       token,

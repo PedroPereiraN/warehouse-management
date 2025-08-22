@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { CreateUserUsecase } from "../../../../usecases/user/create-user.usecase";
 import {
   CreateUserInputDto,
+  CreateUserOutputDto,
   CreateUserResponseDto,
 } from "../../../../dtos/user";
 import * as z from "zod";
@@ -24,7 +25,7 @@ export class CreateUserRoute implements Route {
 
   private validate(values: CreateUserInputDto) {
     const schema = z.object({
-      email: z.string().email().optional(),
+      email: z.string().email(),
       name: z.string().min(2),
       phone: z.string().min(11).max(11).optional(),
       password: z.string().min(6),
@@ -117,7 +118,7 @@ export class CreateUserRoute implements Route {
     return this.method;
   }
 
-  private present(input: CreateUserResponseDto): CreateUserResponseDto {
+  private present(input: CreateUserOutputDto): CreateUserResponseDto {
     const response = { id: input.id };
     return response;
   }
